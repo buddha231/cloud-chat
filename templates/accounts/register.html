@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>chat</title>
+    <link rel="stylesheet" href="chat.css">
+    <script>
+    {% if wrong_password %}
+        window.alert("{{ wrong_password }}")
+    {% endif %}
+    {% if login_required%}
+        window.alert("{{ login_required }}")
+    {% endif %}
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <form class="login" method="post", enctype="multipart/form-data">
+                {% csrf_token %}
+                <label>username</label>
+                <input type="text" name="username" id="" required>
+                <br>
+                <label>password</label>
+                <input type="password" name="password" id="" required>
+                <br>
+                <label> id </label>
+                <input type="text" name="id" id="" required>
+                <br>
+                <label> profile-pic </label>
+                <input type="file" name="photo" id="">
+                <br>
+                <button>login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
