@@ -161,7 +161,13 @@
         return false;
       }
     $(document).ready(function () {
-      var url = "ws://" + window.location.host + "/ws/chat/" + "{{id}}/";
+      if (window.location.protocol.includes("https")){
+        var protocol = "wss://"
+      }
+      else{
+        var protocol = "ws://"
+      }
+      var url = protocol + window.location.host + "/ws/chat/" + "{{id}}/";
       var chatSocket = new ReconnectingWebSocket(url);
       
 
@@ -183,10 +189,6 @@
         console.log(data);
         var message = data.message;
         var username = data.sender;
-        var time = new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
         var photo = data.photo
         photo = photo.replace(/\s+/g, '')
         console.log(photo)
