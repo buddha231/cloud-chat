@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def register(request):
+    if request.user.is_authenticated:
+        return redirect(f"/chat/1")
+        
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
