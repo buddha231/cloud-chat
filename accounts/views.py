@@ -15,6 +15,7 @@ def register(request):
         password = request.POST["password"]
         photo = request.FILES.get('photo')
         room_id = request.POST["id"]
+        print(photo)
         user, created = User.objects.get_or_create(username = username)
         if created:
             """condition for new account created"""
@@ -22,7 +23,7 @@ def register(request):
                     password 
                 )
             user.save()
-            Account.objects.create(user=user)
+            account = Account.objects.create(user=user)
             user = auth.authenticate(username=username, password = password)
             auth.login(request, user)
         else:
@@ -30,11 +31,16 @@ def register(request):
             user = auth.authenticate(username = username, password = password) 
             if user is not None:
                 auth.login(request, user)
+                account = Account.objects.get(user = user)
             else:
                 """password error"""
                 return render(request, 'accounts/register.html', 
                         context= {"wrong_password": "wrong password"}
                 )
+        if photo:
+            account.photo = photo
+            account.save()
+            
         return redirect( f"/chat/{room_id}")
     return render(request, 'accounts/register.html')
 

@@ -21,12 +21,6 @@
   </head>
 
   <body>
-    <section
-      data-bs-version="5.1"
-      class="menu cid-s48OLK6784"
-      once="menu"
-      id="menu1-k"
-    >
       <nav
         class="navbar navbar-light bg-white border-bottom"
         style="padding-left: 300px; padding-right: 300px"
@@ -38,11 +32,10 @@
         >
           chat<span class="text-primary" style="font-weight: 700">app.</span>
         </a>
-        <button type="button" class="btn btn-light btn-sm">
-          <i class="fal fa-sign-out-alt"></i>
-        </button>
+        {% comment %}<button type="button" class="btn btn-light btn-sm">{% endcomment %}
+          {% comment %}<i class="fal fa-sign-out-alt"></i>{% endcomment %}
+        {% comment %}</button>{% endcomment %}
       </nav>
-    </section>
 
     <section data-bs-version="5.1" class="form6 cid-sIMGF8xM9G" id="form6-n">
       <div class="container">
@@ -66,6 +59,7 @@
               class="mbr-form form-with-styler mx-auto"
               data-form-title="Form Name"
               autocomplete="off"
+              enctype="multipart/form-data"
             >
               {% csrf_token %}
               <div class="dragArea row">
