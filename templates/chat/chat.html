@@ -53,33 +53,36 @@
         </form>
       </div>
     </div> -->
-    <nav
-      class="navbar navbar-light bg-white border-bottom"
-      style="padding-left: 300px; padding-right: 300px"
-    >
-      <a
-        class="navbar-brand py-3"
-        style="font-weight: 700; font-family: Arial, Helvetica, sans-serif"
-        href="#"
-      >
-        chat<span class="text-primary">app.</span>
-      </a>
-      <button type="button" class="btn btn-light btn-sm">
+    <nav class="navbar navbar-light bg-white border-bottom">
+      <div class="container" style="width: 80% !important">
         <a
-          class="fal fa-sign-out-alt text-dark"
-          href="{% url 'logout' %}"
-          style="text-decoration: none; font-size: 20px"
-        ></a>
-      </button>
+          class="navbar-brand py-3"
+          style="font-weight: 700; font-family: Arial, Helvetica, sans-serif"
+          href="#"
+        >
+          chat<span class="text-primary">app.</span>
+        </a>
+        <button type="button" class="btn btn-light btn-sm">
+          <a
+            class="fal fa-sign-out-alt text-dark"
+            href="{% url 'logout' %}"
+            style="text-decoration: none; font-size: 20px"
+          ></a>
+        </button>
+      </div>
     </nav>
     <div class="mb-5"></div>
-    <div class="container m-auto bg-light" style="width: 960px">
+    <div class="container m-auto bg-light" style="width: 80%">
       <div class="border-bottom py-2" style="font-size: 23px">
         <span style="color: rgb(211, 211, 211)">[</span> Room {{ id }}
         <span style="color: rgb(211, 211, 211)">]</span>
       </div>
       <div style="height: 60vh">
-        <div class="h-100 bg-white p-4" style="overflow-y: auto" id ="message_box">
+        <div
+          class="h-100 bg-white p-4"
+          style="overflow-y: auto"
+          id="message_box"
+        >
           <!-- <div class="mb-3">
             <div class="row">
               <img
@@ -135,16 +138,28 @@
             />
           </div> -->
         </div>
-        <form onsubmit="return disable_submit();">
-        <div class="input-group my-3">
-          <input type="text" class="form-control" id ="msg" placeholder="Write Message" autocomplete="off"/>
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id = "btn">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
+        <div>
+          <form onsubmit="return disable_submit();">
+            <div class="input-group my-3">
+              <input
+                type="text"
+                class="form-control"
+                id="msg"
+                placeholder="Write Message"
+                autocomplete="off"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="btn"
+                >
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        </form>
       </div>
     </div>
   </body>
@@ -152,30 +167,28 @@
     type="text/javascript"
     src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
   ></script>
-  <script src = "https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
   <script type="text/javascript">
-      var $input = $("#msg");
-      var $submit = $("#btn");
-      function disable_submit(){
-        $submit.click()
-        return false;
-      }
+    var $input = $("#msg");
+    var $submit = $("#btn");
+    function disable_submit() {
+      $submit.click();
+      return false;
+    }
     $(document).ready(function () {
-      if (window.location.protocol.includes("https")){
-        var protocol = "wss://"
-      }
-      else{
-        var protocol = "ws://"
+      if (window.location.protocol.includes("https")) {
+        var protocol = "wss://";
+      } else {
+        var protocol = "ws://";
       }
       var url = protocol + window.location.host + "/ws/chat/" + "{{id}}/";
       var chatSocket = new ReconnectingWebSocket(url);
-      
 
       chatSocket.onopen = (event) => {
         $submit.click((eventt) => {
           eventt.preventDefault();
           var message = $input.val();
-          console.log(message)
+          console.log(message);
           if (message) {
             chatSocket.send(JSON.stringify({ message: message }));
             $input.val("");
@@ -189,25 +202,36 @@
         console.log(data);
         var message = data.message;
         var username = data.sender;
-        var photo = data.photo
-        photo = photo.replace(/\s+/g, '')
-        console.log(photo)
-        var $message_box = $("#message_box")
-        if ("{{ account.user.username }}" == username){
-          text = '<div class="mb-3 d-flex justify-content-end"> <div class="column"> <div style="font-size: 13px; text-align: right" class="pb-1" ></div> <div class="text-dark px-2 py-1" style=" background: rgb(236, 236, 236); max-width: 500px; border-radius: 10px; " > <span style="color: blue">you</span> <br />' + message +' </div> </div> <div style="width: 5px"></div> <img src="'+photo+'" style="border-radius: 100%; height: 38px; width: 38px" alt="" /> </div>'
-          $message_box.append(text)
-          $("#message_box").animate({
-          scrollTop: $(
-            '#message_box').get(0).scrollHeight
-        }, 600);
-
-        }
-        else {
-          text = '<div class="mb-3"> <div class="row"> <img src=' +photo+' style="border-radius: 100%; height: 38px; width: 61px" alt="" /> <div class="text-dark px-2 py-1" style=" background: rgb(236, 236, 236); max-width: 500px; border-radius: 10px; " > <span style="color: blue">'+ username +'</span> <br />' + message + '</div> </div> </div>'
-          $message_box.append(text)
-
+        var photo = data.photo;
+        photo = photo.replace(/\s+/g, "");
+        console.log(photo);
+        var $message_box = $("#message_box");
+        if ("{{ account.user.username }}" == username) {
+          text =
+            '<div class="mb-3 d-flex justify-content-end"> <div class="column"> <div style="font-size: 13px; text-align: right" class="pb-1" ></div> <div class="text-dark px-2 py-1" style=" background: rgb(236, 236, 236); max-width: 500px; border-radius: 10px; " > <span style="color: blue">you</span> <br />' +
+            message +
+            ' </div> </div> <div style="width: 5px"></div> <img src="' +
+            photo +
+            '" style="border-radius: 100%; height: 38px; width: 38px" alt="" /> </div>';
+          $message_box.append(text);
+          $("#message_box").animate(
+            {
+              scrollTop: $("#message_box").get(0).scrollHeight,
+            },
+            600
+          );
+        } else {
+          text =
+            '<div class="mb-3"> <div class="row"> <img src=' +
+            photo +
+            ' style="border-radius: 100%; height: 38px; width: 61px" alt="" /> <div class="text-dark px-2 py-1" style=" background: rgb(236, 236, 236); max-width: 500px; border-radius: 10px; " > <span style="color: blue">' +
+            username +
+            "</span> <br />" +
+            message +
+            "</div> </div> </div>";
+          $message_box.append(text);
         }
       };
-    })
+    });
   </script>
 </html>
